@@ -7,6 +7,48 @@ function stripHtmlTags(value) {
   return String(value || "").replace(/<[^>]*>/g, "").trim();
 }
 
+function estimateReadingTime(markdown) {
+  const plain = stripHtmlTags(String(markdown || "").replace(/[#>*_`[\]()!-]/g, " "));
+  const words = plain.split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 220));
+  return `${minutes} min read`;
+}
+
+function styleRenderedContent(contentEl) {
+  contentEl.className = "text-gray-700";
+
+  contentEl.querySelectorAll("h1").forEach((el) => {
+    el.className = "mt-8 mb-4 text-3xl font-bold tracking-tight text-gray-900";
+  });
+  contentEl.querySelectorAll("h2").forEach((el) => {
+    el.className = "mt-8 mb-4 text-2xl font-bold tracking-tight text-gray-900";
+  });
+  contentEl.querySelectorAll("h3").forEach((el) => {
+    el.className = "mt-6 mb-3 text-xl font-bold tracking-tight text-gray-900";
+  });
+  contentEl.querySelectorAll("p").forEach((el) => {
+    el.className = "mb-6 leading-relaxed text-gray-700";
+  });
+  contentEl.querySelectorAll("ul").forEach((el) => {
+    el.className = "mb-4 list-disc space-y-2 pl-5 text-gray-700";
+  });
+  contentEl.querySelectorAll("ol").forEach((el) => {
+    el.className = "mb-4 list-decimal space-y-2 pl-5 text-gray-700";
+  });
+  contentEl.querySelectorAll("li").forEach((el) => {
+    el.classList.add("leading-relaxed");
+  });
+  contentEl.querySelectorAll("a").forEach((el) => {
+    el.className = "font-semibold text-indigo-600 transition hover:underline";
+    if (!el.getAttribute("rel")) {
+      el.setAttribute("rel", "noopener");
+    }
+  });
+  contentEl.querySelectorAll("blockquote").forEach((el) => {
+    el.className = "mb-6 border-l-4 border-gray-300 pl-4 italic text-gray-600";
+  });
+}
+
 function applySeo(title, description, slug) {
   document.title = `${title} | Crypto Tax Blog`;
   const metaDescription = document.querySelector('meta[name="description"]');
@@ -69,6 +111,7 @@ async function loadPost() {
   const titleEl = document.getElementById("post-title");
   const contentEl = document.getElementById("post-content");
   const metaEl = document.getElementById("post-meta");
+  const readingTimeEl = document.getElementById("reading-time");
   const errorEl = document.getElementById("post-error");
 
   if (!slug) {
@@ -79,10 +122,15 @@ async function loadPost() {
 
   try {
     const { title, markdown } = await fetchPost(slug);
+    marked.setOptions({ gfm: true, breaks: false });
     const sanitizedHtml = DOMPurify.sanitize(marked.parse(markdown));
     titleEl.textContent = stripHtmlTags(title);
     contentEl.innerHTML = sanitizedHtml;
+    styleRenderedContent(contentEl);
     metaEl.textContent = `Published article: ${slug}`;
+    if (readingTimeEl) {
+      readingTimeEl.textContent = estimateReadingTime(markdown);
+    }
 
     const firstParagraph = markdown.split("\n").find((line) => line.trim().length > 40) || "Crypto tax guide and automation insights.";
     applySeo(title, firstParagraph.slice(0, 155), slug);

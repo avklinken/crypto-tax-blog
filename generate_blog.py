@@ -65,7 +65,7 @@ def write_remaining_topics(path: Path, remaining_lines: list[str]) -> None:
 
 def generate_article(client: OpenAI, topic: str) -> str:
   prompt = f"""
-Write a high-quality SEO blog article in English about: "{topic}".
+Write a high-quality SEO blog article in Dutch (Nederlands)  about: "{topic}".
 
 Requirements:
 - Around 1200 words.

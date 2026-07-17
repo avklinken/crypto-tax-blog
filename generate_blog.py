@@ -134,7 +134,17 @@ def clean_json_response(raw: str) -> str:
   return cleaned.strip()
 
 
-def generate_article(client: OpenAI, topic: str) -> dict[str, str] | None:
+def format_keyword_list(keywords: list[str]) -> str:
+  return ", ".join(f'"{keyword}"' for keyword in keywords if keyword)
+
+
+def generate_article(client: OpenAI, topic: str, affiliate_keywords: list[str]) -> dict[str, str] | None:
+  keyword_list = format_keyword_list(affiliate_keywords)
+  keyword_requirement = (
+    f"Crucial SEO Requirement: You MUST naturally and contextually weave the following brand names into the article at least 1 or 2 times each: {keyword_list}."
+    if keyword_list
+    else "Crucial SEO Requirement: Keep the article brand-compatible and ready for affiliate keyword injection."
+  )
   prompt = f"""
 Geef een hoogwaardig Nederlands SEO-artikel over: "{topic}".
 
@@ -151,6 +161,7 @@ Regels:
 - Gebruik echte Markdown-opmaak voor koppen, lijsten, vetgedrukte tekst en links.
 - Gebruik alleen beschrijvende alt-teksten bij afbeeldingen en voorkom raw HTML img-tags.
 - Maak de content SEO-vriendelijk, maar natuurlijk leesbaar.
+- {keyword_requirement}
 - Geen code fences, geen extra uitleg, alleen JSON.
 """.strip()
 
@@ -163,7 +174,8 @@ Regels:
         "role": "system",
         "content": (
           "You are an expert Dutch SEO blog writer. "
-          "Always return one valid JSON object with keys: title, meta_title, meta_description, content."
+          "Always return one valid JSON object with keys: title, meta_title, meta_description, content. "
+          "You must naturally include all provided affiliate brand keywords in the article body."
         ),
       },
       {"role": "user", "content": prompt},
@@ -452,6 +464,8 @@ def build_robots(robots_path: Path) -> None:
 def main() -> None:
   CONTENT_DIR.mkdir(parents=True, exist_ok=True)
   topics, remaining = read_top_topics(TOPICS_FILE, amount=2)
+  rules = load_affiliate_rules(AFFILIATES_FILE)
+  affiliate_keywords = [rule.keyword for rule in rules]
 
   if topics:
     api_key = os.getenv("OPENAI_API_KEY")
@@ -462,7 +476,7 @@ def main() -> None:
     failed_topics: list[str] = []
     for topic in topics:
       try:
-        article = generate_article(client, topic)
+        article = generate_article(client, topic, affiliate_keywords)
       except Exception as exc:
         print(f"[WARN] Failed to generate topic '{topic}': {exc}")
         failed_topics.append(topic)
@@ -476,7 +490,6 @@ def main() -> None:
 
     write_remaining_topics(TOPICS_FILE, failed_topics + remaining)
 
-  rules = load_affiliate_rules(AFFILIATES_FILE)
   inject_links_into_all_articles(CONTENT_DIR, rules)
   rebuild_post_index(CONTENT_DIR, INDEX_FILE)
   build_sitemap(CONTENT_DIR, SITEMAP_FILE)

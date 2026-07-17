@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post | Crypto Tax Blog</title>
+    <meta name="description" content="Read the latest crypto tax guide." />
+    <link id="canonical-link" rel="canonical" href="https://example.com/post.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Post | Crypto Tax Blog" />
+    <meta property="og:description" content="Read the latest crypto tax guide." />
+    <meta property="og:url" content="https://example.com/post.html" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased">
+    <header class="border-b border-slate-800">
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-6 sm:px-6">
+        <a href="./index.html" class="text-sm text-slate-300 hover:text-slate-100">← Back to homepage</a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <article class="rounded-xl border border-slate-800 bg-slate-900/70 p-6 sm:p-8">
+        <p id="post-meta" class="text-sm text-slate-400"></p>
+        <h1 id="post-title" class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl"></h1>
+        <div id="post-content" class="prose prose-invert mt-8 max-w-none"></div>
+      </article>
+      <p id="post-error" class="mt-8 hidden rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-red-200">
+        Could not load this post.
+      </p>
+    </main>
+
+    <script src="./assets/js/post.js" defer></script>
+  </body>
+</html>

@@ -31,7 +31,7 @@ def slugify(text: str) -> str:
   return slug or f"post-{int(datetime.now(timezone.utc).timestamp())}"
 
 
-def read_top_topics(path: Path, amount: int = 3) -> tuple[list[str], list[str]]:
+def read_top_topics(path: Path, amount: int = 2) -> tuple[list[str], list[str]]:
   if not path.exists():
     raise FileNotFoundError(f"Missing topics file: {path}")
 
@@ -51,7 +51,8 @@ def read_top_topics(path: Path, amount: int = 3) -> tuple[list[str], list[str]]:
   if not selected_topics:
     return [], lines
 
-  remaining = [line for idx, line in enumerate(lines) if idx not in set(selected_indices)]
+  selected_index_set = set(selected_indices)
+  remaining = [line for idx, line in enumerate(lines) if idx not in selected_index_set]
   return selected_topics, remaining
 
 
@@ -65,7 +66,7 @@ def write_remaining_topics(path: Path, remaining_lines: list[str]) -> None:
 
 def generate_article(client: OpenAI, topic: str) -> str:
   prompt = f"""
-Write a high-quality SEO blog article in Dutch (Nederlands)  about: "{topic}".
+Write a high-quality Dutch (Nederlands) SEO blog article about: "{topic}".
 
 Requirements:
 - Around 1200 words.
@@ -81,7 +82,7 @@ Requirements:
     model="gpt-4o",
     temperature=0.7,
     messages=[
-      {"role": "system", "content": "You are an expert SEO blog writer."},
+      {"role": "system", "content": "You are an expert Dutch SEO blog writer."},
       {"role": "user", "content": prompt},
     ],
   )
@@ -204,7 +205,7 @@ def rebuild_post_index(content_dir: Path, index_path: Path) -> None:
 
 def main() -> None:
   CONTENT_DIR.mkdir(parents=True, exist_ok=True)
-  topics, remaining = read_top_topics(TOPICS_FILE, amount=3)
+  topics, remaining = read_top_topics(TOPICS_FILE, amount=2)
 
   if topics:
     api_key = os.getenv("OPENAI_API_KEY")

@@ -168,8 +168,52 @@ function extractMarkdownDocument(markdownText, fallbackSlug) {
   };
 }
 
+function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlText, "text/html");
+  const titleFromHead = stripHtmlTags(doc.querySelector("meta[property='og:title']")?.getAttribute("content") || doc.title || "");
+  const descriptionFromHead = stripHtmlTags(
+    doc.querySelector("meta[property='og:description']")?.getAttribute("content") || doc.querySelector("meta[name='description']")?.getAttribute("content") || ""
+  );
+  const publishedFromHead = stripHtmlTags(
+    doc.querySelector("meta[property='article:published_time']")?.getAttribute("content") || doc.querySelector("time[datetime]")?.getAttribute("datetime") || ""
+  );
+
+  const contentNode =
+    doc.querySelector("main article .post-content, main article .entry-content, main article .markdown-body, main article .content") ||
+    doc.querySelector("main article") ||
+    doc.querySelector("article .post-content, article .entry-content, article .markdown-body, article .content") ||
+    doc.querySelector("article") ||
+    doc.querySelector("main") ||
+    doc.body;
+
+  const container = contentNode.cloneNode(true);
+  container.querySelectorAll("script, style, noscript, iframe").forEach((el) => el.remove());
+  const firstH1 = container.querySelector("h1");
+  if (firstH1) {
+    firstH1.remove();
+  }
+
+  const titleFromContent = stripHtmlTags(
+    doc.querySelector("main article h1")?.textContent || doc.querySelector("article h1")?.textContent || doc.querySelector("h1")?.textContent || ""
+  );
+  const title = titleFromContent || titleFromHead || fallbackSlug.replace(/-/g, " ");
+
+  return {
+    meta: {
+      title,
+      meta_title: titleFromHead || title,
+      meta_description: descriptionFromHead,
+      published_at: publishedFromHead,
+      slug: fallbackSlug,
+    },
+    body: container.innerHTML.trim(),
+    body_format: "html",
+  };
+}
+
 async function fetchPost(slug) {
-  const candidates = [`./content/${slug}.md`, `./content/${slug}.json`, `./content/${slug}.txt`];
+  const candidates = [`./content/${slug}.md`, `./content/${slug}.json`, `./content/${slug}.txt`, `./content/${slug}.html`];
 
   for (const path of candidates) {
     const response = await fetch(path, { cache: "no-store" });
@@ -188,10 +232,14 @@ async function fetchPost(slug) {
           slug,
         },
         body: removeLeadingH1(markdown),
+        body_format: "markdown",
       };
     }
 
     const rawText = await response.text();
+    if (path.endsWith(".html")) {
+      return extractRenderedHtmlDocument(rawText, slug);
+    }
     return extractMarkdownDocument(rawText, slug);
   }
 
@@ -220,7 +268,8 @@ async function loadPost() {
   try {
     const post = await fetchPost(slug);
     marked.setOptions({ gfm: true, breaks: false });
-    const renderedHtml = DOMPurify.sanitize(marked.parse(post.body));
+    const renderedHtml =
+      post.body_format === "html" ? DOMPurify.sanitize(post.body) : DOMPurify.sanitize(marked.parse(post.body));
 
     titleEl.textContent = stripHtmlTags(post.meta.title);
     contentEl.innerHTML = renderedHtml;

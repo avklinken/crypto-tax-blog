@@ -116,7 +116,6 @@ def load_affiliate_rules(path: Path) -> list[AffiliateRule]:
 
 def inject_links_in_text(text: str, rules: list[AffiliateRule]) -> str:
   anchor_or_markdown_link = re.compile(r"(<a\b[^>]*>.*?</a>|\[[^\]]+\]\([^)]+\))", re.IGNORECASE | re.DOTALL)
-  segments = anchor_or_markdown_link.split(text)
 
   def replace_keyword(segment: str, rule: AffiliateRule) -> str:
     pattern = re.compile(rf"(?<![\w])({re.escape(rule.keyword)})(?![\w])", re.IGNORECASE)
@@ -125,20 +124,29 @@ def inject_links_in_text(text: str, rules: list[AffiliateRule]) -> str:
       segment,
     )
 
-  processed: list[str] = []
-  for segment in segments:
-    if not segment:
-      continue
-    if segment.lower().startswith("<a ") or segment.startswith("["):
-      processed.append(segment)
-      continue
+  def inject_segment(segment: str) -> str:
+    parts = anchor_or_markdown_link.split(segment)
+    processed_parts: list[str] = []
+    for part in parts:
+      if not part:
+        continue
+      if part.lower().startswith("<a ") or part.startswith("["):
+        processed_parts.append(part)
+        continue
+      updated_part = part
+      for rule in rules:
+        updated_part = replace_keyword(updated_part, rule)
+      processed_parts.append(updated_part)
+    return "".join(processed_parts)
 
-    updated = segment
-    for rule in rules:
-      updated = replace_keyword(updated, rule)
-    processed.append(updated)
+  updated_lines: list[str] = []
+  for line in text.splitlines(keepends=True):
+    if re.match(r"^\s*#{1,6}\s", line):
+      updated_lines.append(line)
+      continue
+    updated_lines.append(inject_segment(line))
 
-  return "".join(processed)
+  return "".join(updated_lines)
 
 
 def iter_article_files(content_dir: Path) -> Iterable[Path]:
@@ -164,6 +172,7 @@ def extract_title_and_excerpt(markdown: str, fallback_slug: str) -> tuple[str, s
     if line.startswith("# "):
       title = line[2:].strip()
       break
+  title = re.sub(r"<[^>]+>", "", title).strip()
 
   plain = re.sub(r"<[^>]+>", "", markdown)
   plain = re.sub(r"[#>*_`]", "", plain)

@@ -3,6 +3,10 @@ function getSlug() {
   return (params.get("slug") || "").trim();
 }
 
+function stripHtmlTags(value) {
+  return String(value || "").replace(/<[^>]*>/g, "").trim();
+}
+
 function applySeo(title, description, slug) {
   document.title = `${title} | Crypto Tax Blog`;
   const metaDescription = document.querySelector('meta[name="description"]');
@@ -33,7 +37,7 @@ function parseMarkdownDocument(markdownText, fallbackSlug) {
   }
 
   return {
-    title: title || fallbackSlug.replace(/-/g, " "),
+    title: stripHtmlTags(title || fallbackSlug.replace(/-/g, " ")),
     content: bodyLines.join("\n").trim() || markdownText,
   };
 }
@@ -47,7 +51,7 @@ async function fetchPost(slug) {
 
     if (path.endsWith(".json")) {
       const data = await response.json();
-      const title = data.title || slug.replace(/-/g, " ");
+      const title = stripHtmlTags(data.title || slug.replace(/-/g, " "));
       const markdown = data.content_markdown || data.content || "";
       return { title, markdown };
     }
@@ -76,7 +80,7 @@ async function loadPost() {
   try {
     const { title, markdown } = await fetchPost(slug);
     const sanitizedHtml = DOMPurify.sanitize(marked.parse(markdown));
-    titleEl.textContent = title;
+    titleEl.textContent = stripHtmlTags(title);
     contentEl.innerHTML = sanitizedHtml;
     metaEl.textContent = `Published article: ${slug}`;
 

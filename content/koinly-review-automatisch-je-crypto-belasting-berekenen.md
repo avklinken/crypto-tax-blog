@@ -57,3 +57,16 @@ Om het meeste uit <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate'
 ## Conclusie
 
 <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> is een krachtige tool voor Nederlandse crypto-gebruikers die hun belastingaangifte willen vereenvoudigen. Met zijn automatische synchronisatie en gedetailleerde rapportage, biedt <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> een efficiënte manier om je crypto belastingen te berekenen. Hoewel er een leercurve is bij het opzetten van het platform, maken de voordelen en de gebruiksvriendelijke interface het zeker de moeite waard. Of je nu een ervaren handelaar bent of net begint, <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> kan je helpen om compliant te blijven en tijd te besparen. Probeer het zelf en ontdek hoe <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> je crypto belastingberekeningen kan transformeren.
+
+## Gerelateerde artikelen:
+
+- [Hoeveel belasting betaal je over crypto winst in Nederland?](https://www.cryptobelastinggids.nl/post.html?slug=hoeveel-belasting-betaal-je-over-crypto-winst-in-nederland)
+- [Hoe voorkom je een boete bij je crypto belastingaangifte](https://www.cryptobelastinggids.nl/post.html?slug=hoe-voorkom-je-een-boete-bij-je-crypto-belastingaangifte)
+
+*Disclaimer: De informatie op deze website is louter informatief en vormt geen financieel of fiscaal advies. Verifieer wetgeving altijd bij de Belastingdienst of een erkend adviseur.*
+
+## Over de auteur
+
+**Milan de Groot — On-chain Data Analist**
+
+Milan analyseert walletstromen, exchange-data en transactielogs voor fiscale reconstructies. Zijn focus ligt op aantoonbare datakwaliteit en reproduceerbare rapportages.

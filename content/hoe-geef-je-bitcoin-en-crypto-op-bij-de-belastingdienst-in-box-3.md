@@ -52,3 +52,16 @@ Het opgeven van cryptovaluta kan soms lastig zijn. Hier zijn enkele praktische t
 ## Conclusie
 
 Het opgeven van Bitcoin en andere cryptovaluta bij de Belastingdienst in Box 3 hoeft geen ingewikkeld proces te zijn. Door een goede administratie bij te houden, de juiste tools te gebruiken en de regels nauwkeurig te volgen, kun je met een gerust hart je belastingaangifte doen. Zorg ervoor dat je op 1 januari de waarde van je cryptovaluta correct bepaalt en deze informatie nauwkeurig in je aangifte verwerkt. Door deze stappen te volgen, voorkom je problemen en zorg je ervoor dat je aan je fiscale verplichtingen voldoet.
+
+## Gerelateerde artikelen:
+
+- [Hoe voorkom je een boete bij je crypto belastingaangifte](https://www.cryptobelastinggids.nl/post.html?slug=hoe-voorkom-je-een-boete-bij-je-crypto-belastingaangifte)
+- [Hoe bereken je de winst over je crypto transacties voor de fiscus](https://www.cryptobelastinggids.nl/post.html?slug=hoe-bereken-je-de-winst-over-je-crypto-transacties-voor-de-fiscus)
+
+*Disclaimer: De informatie op deze website is louter informatief en vormt geen financieel of fiscaal advies. Verifieer wetgeving altijd bij de Belastingdienst of een erkend adviseur.*
+
+## Over de auteur
+
+**Eva van Riet — Crypto Belastingconsultant**
+
+Eva begeleidt Nederlandse beleggers bij Box 3-aangiftes en portefeuille-structurering. Ze vertaalt fiscale regels naar praktische stappen voor particuliere crypto-investeerders.

@@ -367,6 +367,61 @@ def append_related_and_signature(
   return "\n\n".join(parts).strip()
 
 
+def enrich_existing_articles(content_dir: Path, existing_posts: list[dict[str, str]]) -> None:
+  for article_path in iter_article_files(content_dir):
+    if article_path.suffix.lower() not in {".md", ".txt"}:
+      continue
+
+    raw = article_path.read_text(encoding="utf-8")
+    metadata, body = parse_front_matter(raw)
+    body = body.strip()
+    slug = article_path.stem
+
+    title = str(metadata.get("title", "")).strip()
+    if not title:
+      for line in body.splitlines():
+        if line.strip().startswith("# "):
+          title = line.strip()[2:].strip()
+          break
+    if not title:
+      title = slug.replace("-", " ").title()
+
+    language_context = get_language_context(detect_language(title))
+    author = select_author(slug)
+    related_candidates = [post for post in existing_posts if str(post.get("slug", "")).strip() != slug]
+    related_posts = select_related_posts(slug, title, related_candidates, max_links=2)
+
+    has_related = re.search(r"^##\s+(Gerelateerde artikelen|Related articles):?\s*$", body, flags=re.MULTILINE | re.IGNORECASE)
+    has_disclaimer = re.search(r"\*Disclaimer:", body, flags=re.IGNORECASE)
+    has_author = re.search(r"^##\s+(Over de auteur|About the author)\s*$", body, flags=re.MULTILINE | re.IGNORECASE)
+
+    if has_related and has_disclaimer and has_author:
+      continue
+
+    additions: list[str] = []
+    if not has_related and related_posts:
+      links = [f"- [{post['title']}]({SITE_URL}/post.html?slug={post['slug']})" for post in related_posts]
+      additions.append(f"## {language_context['related_heading']}\n\n" + "\n".join(links))
+    if not has_disclaimer:
+      additions.append(language_context["disclaimer"])
+    if not has_author:
+      additions.append(
+        f"## {language_context['author_heading']}\n\n"
+        f"**{author.name} — {author.role}**\n\n"
+        f"{author.bio}"
+      )
+
+    if not additions:
+      continue
+
+    enriched_body = (body + "\n\n" + "\n\n".join(additions)).strip() + "\n"
+    front_matter_block, _, has_front_matter = split_front_matter_block(raw)
+    if has_front_matter:
+      article_path.write_text(front_matter_block + "\n" + enriched_body, encoding="utf-8")
+    else:
+      article_path.write_text(enriched_body, encoding="utf-8")
+
+
 def generate_article(
   client: OpenAI,
   topic: str,
@@ -755,6 +810,7 @@ def main() -> None:
 
     write_remaining_topics(TOPICS_FILE, failed_topics + remaining)
 
+  enrich_existing_articles(CONTENT_DIR, existing_posts)
   inject_links_into_all_articles(CONTENT_DIR, rules)
   rebuild_post_index(CONTENT_DIR, INDEX_FILE)
   build_sitemap(CONTENT_DIR, SITEMAP_FILE)

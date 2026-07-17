@@ -63,3 +63,16 @@ De belastingtarieven in box 3 zijn progressief en zijn gebaseerd op de totale wa
 ## Conclusie
 
 Het berekenen van je crypto winst voor de fiscus kan een complex proces zijn, maar met de juiste voorbereiding en hulpmiddelen kun je dit goed aanpakken. Door al je transacties nauwkeurig te volgen en je winsten en verliezen correct te berekenen, kun je voldoen aan je fiscale verplichtingen en onnodige boetes vermijden. Vergeet niet dat de regels en tarieven kunnen veranderen, dus blijf op de hoogte van de laatste informatie van de Belastingdienst. Met deze stappen ben je goed op weg om je crypto winsten correct te rapporteren.
+
+## Gerelateerde artikelen:
+
+- [Hoeveel belasting betaal je over crypto winst in Nederland?](https://www.cryptobelastinggids.nl/post.html?slug=hoeveel-belasting-betaal-je-over-crypto-winst-in-nederland)
+- [Hoe voorkom je een boete bij je crypto belastingaangifte](https://www.cryptobelastinggids.nl/post.html?slug=hoe-voorkom-je-een-boete-bij-je-crypto-belastingaangifte)
+
+*Disclaimer: De informatie op deze website is louter informatief en vormt geen financieel of fiscaal advies. Verifieer wetgeving altijd bij de Belastingdienst of een erkend adviseur.*
+
+## Over de auteur
+
+**Sanne Verbeek — Financieel Jurist**
+
+Sanne specialiseert zich in Europese crypto-regelgeving en Nederlandse fiscale compliance. Ze helpt lezers juridische risico’s te herkennen voordat ze in de praktijk escaleren.

@@ -1,4 +1,33 @@
 {
-  "generated_at": "1970-01-01T00:00:00+00:00",
-  "posts": []
+  "generated_at": "2026-07-17T09:10:54.939652+00:00",
+  "posts": [
+    {
+      "slug": "best-practices-for-securing-assets-with-ledger-nano-devices",
+      "title": "Best Practices for Securing Assets with <a href='https://ledger.com' target='_blank' rel='noopener nofollow sponsored'>Ledger Nano</a> Devices",
+      "excerpt": "Best Practices for Securing Assets with Ledger Nano Devices In an era where digital assets are becoming increasingly valuable, safeguarding them is paramount. Ledger Nano",
+      "published_at": "2026-07-17T09:10:54.938210+00:00",
+      "file": "best-practices-for-securing-assets-with-ledger-nano-devices.md"
+    },
+    {
+      "slug": "how-to-track-crypto-taxes-with-koinly-in-2026",
+      "title": "How to Track Crypto Taxes with <a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> in 2026",
+      "excerpt": "How to Track Crypto Taxes with Koinly in 2026 As the world of cryptocurrency continues to evolve, so do the regulations surrounding its taxation. Keeping track of your cr",
+      "published_at": "2026-07-17T09:10:54.937609+00:00",
+      "file": "how-to-track-crypto-taxes-with-koinly-in-2026.md"
+    },
+    {
+      "slug": "crypto-capital-gains-basics-for-long-term-investors",
+      "title": "Crypto Capital Gains Basics for Long-Term Investors",
+      "excerpt": "Crypto Capital Gains Basics for Long-Term Investors Cryptocurrency investment has gained substantial traction over the past decade, transforming from a niche interest to ",
+      "published_at": "2026-07-17T09:10:54.936010+00:00",
+      "file": "crypto-capital-gains-basics-for-long-term-investors.md"
+    },
+    {
+      "slug": "welcome",
+      "title": "Welcome to Crypto Tax Blog",
+      "excerpt": "Welcome to Crypto Tax Blog This starter article confirms your static blog setup works. Run generateblog.py to automatically generate new content, inject affiliate links i",
+      "published_at": "2026-07-17T09:10:07.881120+00:00",
+      "file": "welcome.md"
+    }
+  ]
 }

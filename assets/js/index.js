@@ -1,5 +1,5 @@
 async function loadPosts() {
-  const SITE_URL = "https://www.cryptotaxauthority.nl";
+  const SITE_URL = "https://www.cryptobelastinggids.nl";
   const postsContainer = document.getElementById("posts");
   const emptyState = document.getElementById("empty");
   const searchInput = document.getElementById("post-search");

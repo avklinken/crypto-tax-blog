@@ -1,4 +1,4 @@
-const SITE_URL = "https://www.cryptotaxauthority.nl";
+const SITE_URL = "https://www.cryptobelastinggids.nl";
 
 function getSlug() {
   const params = new URLSearchParams(window.location.search);
@@ -137,13 +137,13 @@ function applySeo(meta, fallbackTitle, fallbackDescription, slug) {
   const description = stripHtmlTags(meta.meta_description || fallbackDescription);
   const url = `${SITE_URL}/post.html?slug=${encodeURIComponent(slug)}`;
 
-  document.title = `${title} | CryptoTaxAuthority`;
+  document.title = `${title} | CryptoBelastingGids`;
   setMetaTag('meta[name="description"]', description);
   setMetaTag('meta[property="og:title"]', title);
   setMetaTag('meta[property="og:description"]', description);
   setMetaTag('meta[property="og:type"]', "article");
   setMetaTag('meta[property="og:url"]', url);
-  setMetaTag('meta[property="og:site_name"]', "CryptoTaxAuthority");
+  setMetaTag('meta[property="og:site_name"]', "CryptoBelastingGids");
   setMetaTag('meta[name="robots"]', "index,follow");
 
   const canonical = document.getElementById("canonical-link");

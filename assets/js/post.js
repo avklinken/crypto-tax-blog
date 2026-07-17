@@ -15,25 +15,25 @@ function estimateReadingTime(markdown) {
 }
 
 function styleRenderedContent(contentEl) {
-  contentEl.className = "text-gray-700";
+  contentEl.className = "text-slate-700";
 
   contentEl.querySelectorAll("h1").forEach((el) => {
-    el.className = "mt-8 mb-4 text-3xl font-bold tracking-tight text-gray-900";
+    el.className = "mt-8 mb-4 text-3xl font-bold tracking-tight text-slate-900";
   });
   contentEl.querySelectorAll("h2").forEach((el) => {
-    el.className = "mt-8 mb-4 text-2xl font-bold tracking-tight text-gray-900";
+    el.className = "mt-8 mb-4 text-2xl font-bold tracking-tight text-slate-900";
   });
   contentEl.querySelectorAll("h3").forEach((el) => {
-    el.className = "mt-6 mb-3 text-xl font-bold tracking-tight text-gray-900";
+    el.className = "mt-6 mb-3 text-xl font-bold tracking-tight text-slate-900";
   });
   contentEl.querySelectorAll("p").forEach((el) => {
-    el.className = "mb-6 leading-relaxed text-gray-700";
+    el.className = "mb-6 leading-relaxed text-slate-700";
   });
   contentEl.querySelectorAll("ul").forEach((el) => {
-    el.className = "mb-4 list-disc space-y-2 pl-5 text-gray-700";
+    el.className = "mb-4 list-disc space-y-2 pl-5 text-slate-700";
   });
   contentEl.querySelectorAll("ol").forEach((el) => {
-    el.className = "mb-4 list-decimal space-y-2 pl-5 text-gray-700";
+    el.className = "mb-4 list-decimal space-y-2 pl-5 text-slate-700";
   });
   contentEl.querySelectorAll("li").forEach((el) => {
     el.classList.add("leading-relaxed");
@@ -45,7 +45,7 @@ function styleRenderedContent(contentEl) {
     }
   });
   contentEl.querySelectorAll("blockquote").forEach((el) => {
-    el.className = "mb-6 border-l-4 border-gray-300 pl-4 italic text-gray-600";
+    el.className = "mb-6 border-l-4 border-slate-300 pl-4 italic text-slate-600";
   });
 }
 
@@ -112,7 +112,12 @@ async function loadPost() {
   const contentEl = document.getElementById("post-content");
   const metaEl = document.getElementById("post-meta");
   const readingTimeEl = document.getElementById("reading-time");
+  const footerYear = document.getElementById("footer-year");
   const errorEl = document.getElementById("post-error");
+
+  if (footerYear) {
+    footerYear.textContent = String(new Date().getFullYear());
+  }
 
   if (!slug) {
     errorEl.textContent = "Missing slug. Open this page with ?slug=your-post-slug.";

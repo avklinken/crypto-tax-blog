@@ -19,25 +19,74 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./assets/css/styles.css" />
   </head>
-  <body class="bg-slate-950 text-slate-100 antialiased">
-    <header class="border-b border-slate-800">
-      <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Crypto Tax Blog</h1>
-        <p class="mt-2 max-w-2xl text-slate-300">
-          Straightforward tax content, tools, and tutorials for crypto investors.
-        </p>
+  <body class="bg-gray-50 text-slate-900 antialiased">
+    <header class="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+        <a href="./index.html" class="text-lg font-extrabold tracking-tight text-slate-900">CryptoTaxAuthority</a>
+        <nav class="flex items-center gap-3">
+          <a href="./index.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Home</a>
+          <a
+            href="https://koinly.io"
+            target="_blank"
+            rel="noopener nofollow sponsored"
+            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            >Top Tool: Koinly</a
+          >
+        </nav>
       </div>
     </header>
 
-    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <section>
-        <h2 class="text-xl font-semibold text-slate-100">Latest posts</h2>
-        <div id="posts" class="mt-6 grid gap-4 sm:grid-cols-2"></div>
-        <p id="empty" class="mt-8 hidden rounded-lg border border-slate-700 bg-slate-900 p-4 text-slate-300">
+    <main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <section class="relative overflow-hidden rounded-3xl border border-slate-100 bg-white px-6 py-16 shadow-sm sm:px-10">
+        <div class="hero-grid-bg absolute inset-0"></div>
+        <div class="absolute -top-16 right-10 h-56 w-56 rounded-full bg-indigo-400 opacity-20 blur-3xl"></div>
+        <div class="absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-purple-400 opacity-20 blur-3xl"></div>
+        <div class="relative z-10 max-w-3xl">
+          <p class="inline-flex rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-700">
+            Premium crypto tax hub
+          </p>
+          <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            Crypto Taxes, Simplified by
+            <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">AI</span>
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+            Explore practical tax guides, compliance explainers, and trusted tools designed for modern crypto investors.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <input
+              id="post-search"
+              type="search"
+              placeholder="Search guides, exchanges, and tax tools..."
+              class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+            <a
+              href="https://koinly.io"
+              target="_blank"
+              rel="noopener nofollow sponsored"
+              class="inline-flex shrink-0 items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+              >Try Top Tax Tool</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-12">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900">Latest Insights</h2>
+        </div>
+        <div id="posts" class="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"></div>
+        <p id="empty" class="mt-8 hidden rounded-xl border border-slate-200 bg-white p-4 text-slate-600 shadow-sm">
           No posts found yet. Run the generator script to create content.
         </p>
       </section>
     </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p>© <span id="footer-year"></span> CryptoTaxAuthority. All rights reserved.</p>
+        <p>Educational content. Always verify with a certified tax professional.</p>
+      </div>
+    </footer>
 
     <script src="./assets/js/index.js" defer></script>
   </body>

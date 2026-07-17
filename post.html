@@ -15,30 +15,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
     <link rel="stylesheet" href="./assets/css/styles.css" />
   </head>
-  <body class="bg-gray-50 text-gray-900 antialiased">
+  <body class="bg-gray-50 text-slate-900 antialiased">
+    <header class="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+        <a href="./index.html" class="text-lg font-extrabold tracking-tight text-slate-900">CryptoTaxAuthority</a>
+        <nav class="flex items-center gap-3">
+          <a href="./index.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Home</a>
+          <a
+            href="https://koinly.io"
+            target="_blank"
+            rel="noopener nofollow sponsored"
+            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            >Top Tool: Koinly</a
+          >
+        </nav>
+      </div>
+    </header>
+
     <main class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
       <div class="mb-6">
         <a
           href="./index.html"
-          class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-gray-400 hover:text-gray-900"
+          class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
           >← Back to Home</a
         >
       </div>
-
       <article class="rounded-xl bg-white p-8 shadow-sm md:p-12">
-        <div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+        <div class="mb-4 flex flex-wrap items-center gap-3 text-sm text-slate-500">
           <p id="post-meta"></p>
           <span aria-hidden="true">•</span>
-          <p id="reading-time" class="font-medium text-gray-700"></p>
+          <p id="reading-time" class="font-medium text-slate-700"></p>
         </div>
-        <h1 id="post-title" class="text-4xl font-bold tracking-tight text-gray-900"></h1>
+        <h1 id="post-title" class="text-4xl font-bold tracking-tight text-slate-900"></h1>
         <div id="post-content" class="mt-8"></div>
       </article>
 
-      <p id="post-error" class="mt-8 hidden rounded-lg border border-red-300 bg-red-50 p-4 text-red-700">
+      <p id="post-error" class="mt-8 hidden rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
         Could not load this post.
       </p>
     </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p>© <span id="footer-year"></span> CryptoTaxAuthority. All rights reserved.</p>
+        <p>Educational content. Always verify with a certified tax professional.</p>
+      </div>
+    </footer>
 
     <script src="./assets/js/post.js" defer></script>
   </body>

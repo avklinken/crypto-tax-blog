@@ -1,4 +1,5 @@
 async function loadPosts() {
+  const SITE_URL = "https://www.cryptotaxauthority.nl";
   const postsContainer = document.getElementById("posts");
   const emptyState = document.getElementById("empty");
   const searchInput = document.getElementById("post-search");
@@ -60,10 +61,10 @@ async function loadPosts() {
               day: "numeric",
             })}</p>
             <h3 class="mt-2 text-xl font-bold tracking-tight text-slate-900">
-              <a class="transition group-hover:text-indigo-600" href="./post.html?slug=${encodeURIComponent(post.slug)}">${stripHtmlTags(post.title)}</a>
+              <a class="transition group-hover:text-indigo-600" href="${SITE_URL}/post.html?slug=${encodeURIComponent(post.slug)}">${stripHtmlTags(post.title)}</a>
             </h3>
             <p class="mt-3 text-sm leading-relaxed text-slate-600">${stripHtmlTags(post.excerpt)}</p>
-            <a class="mt-5 inline-flex items-center text-sm font-semibold text-indigo-600 transition hover:underline" href="./post.html?slug=${encodeURIComponent(post.slug)}">
+            <a class="mt-5 inline-flex items-center text-sm font-semibold text-indigo-600 transition hover:underline" href="${SITE_URL}/post.html?slug=${encodeURIComponent(post.slug)}">
               Lees meer →
             </a>
           </article>

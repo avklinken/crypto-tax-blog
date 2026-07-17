@@ -1,4 +1,4 @@
-const SITE_URL = "https://cryptotaxauthority.nl";
+const SITE_URL = "https://www.cryptotaxauthority.nl";
 
 function getSlug() {
   const params = new URLSearchParams(window.location.search);

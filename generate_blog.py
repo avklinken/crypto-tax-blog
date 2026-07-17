@@ -11,7 +11,7 @@ from typing import Iterable
 
 from openai import OpenAI
 
-SITE_URL = "https://cryptotaxauthority.nl"
+SITE_URL = "https://www.cryptotaxauthority.nl"
 ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = ROOT / "content"
 TOPICS_FILE = ROOT / "topics.txt"

@@ -127,7 +127,14 @@ def strip_leading_h1(markdown: str) -> str:
   return "\n".join(stripped).strip()
 
 
-def generate_article(client: OpenAI, topic: str) -> dict[str, str]:
+def clean_json_response(raw: str) -> str:
+  cleaned = raw.strip()
+  cleaned = re.sub(r"^\s*```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+  cleaned = re.sub(r"\s*```\s*$", "", cleaned)
+  return cleaned.strip()
+
+
+def generate_article(client: OpenAI, topic: str) -> dict[str, str] | None:
   prompt = f"""
 Geef een hoogwaardig Nederlands SEO-artikel over: "{topic}".
 
@@ -135,7 +142,7 @@ Retourneer uitsluitend geldige JSON met deze sleutels:
 - title: de artikelkop in het Nederlands
 - meta_title: een klikwaardige meta title (max 60 tekens)
 - meta_description: een pakkende meta description (max 155 tekens)
-- content_markdown: het volledige artikel in Markdown
+- content: het volledige artikel in Markdown
 
 Regels:
 - Schrijf ongeveer 1200 woorden.
@@ -150,27 +157,45 @@ Regels:
   response = client.chat.completions.create(
     model="gpt-4o",
     temperature=0.7,
+    response_format={"type": "json_object"},
     messages=[
-      {"role": "system", "content": "You are an expert Dutch SEO blog writer."},
+      {
+        "role": "system",
+        "content": (
+          "You are an expert Dutch SEO blog writer. "
+          "Always return one valid JSON object with keys: title, meta_title, meta_description, content."
+        ),
+      },
       {"role": "user", "content": prompt},
     ],
   )
 
   raw = response.choices[0].message.content
   if not raw:
-    raise RuntimeError(f"Empty response for topic: {topic}")
+    print(f"[WARN] Empty response for topic: {topic}")
+    return None
+
+  cleaned_raw = clean_json_response(raw)
 
   try:
-    payload = json.loads(raw)
+    payload = json.loads(cleaned_raw)
   except json.JSONDecodeError as exc:
-    raise RuntimeError(f"Model returned invalid JSON for topic: {topic}") from exc
+    preview = cleaned_raw[:500].replace("\n", " ")
+    print(f"[WARN] Invalid JSON for topic '{topic}': {exc}")
+    print(f"[WARN] Raw preview: {preview}")
+    return None
+
+  if not isinstance(payload, dict):
+    print(f"[WARN] JSON root is not an object for topic: {topic}")
+    return None
 
   title = str(payload.get("title", "")).strip() or topic
   meta_title = trim_to_limit(str(payload.get("meta_title", "")).strip() or title, 60)
-  content_markdown = str(payload.get("content_markdown", "")).strip()
+  content_markdown = str(payload.get("content_markdown") or payload.get("content") or "").strip()
 
   if not content_markdown:
-    raise RuntimeError(f"Missing content_markdown for topic: {topic}")
+    print(f"[WARN] Missing content/content_markdown for topic: {topic}")
+    return None
 
   plain_body = re.sub(r"<[^>]+>", "", content_markdown)
   plain_body = re.sub(r"[#>*_`]", "", plain_body)
@@ -260,9 +285,39 @@ def inject_links_in_text(text: str, rules: list[AffiliateRule]) -> str:
     for part in parts:
       if not part:
         continue
-      if part.lower().startswith("<a ") or part.startswith("["):
-        processed_parts.append(part)
+      if part.lower().startswith("<a "):
+        anchor_match = re.match(r"<a\b[^>]*>(.*?)</a>$", part, flags=re.IGNORECASE | re.DOTALL)
+        if not anchor_match:
+          processed_parts.append(part)
+          continue
+
+        anchor_inner = anchor_match.group(1)
+        anchor_text = re.sub(r"<[^>]+>", "", anchor_inner)
+        anchor_text = re.sub(r"\s+", " ", anchor_text).strip().casefold()
+
+        matched_rule = next((rule for rule in rules if anchor_text == rule.keyword.casefold()), None)
+        if matched_rule:
+          processed_parts.append(
+            f"<a href='{matched_rule.url}' target='_blank' rel='noopener nofollow sponsored'>{anchor_inner}</a>"
+          )
+        else:
+          processed_parts.append(part)
         continue
+
+      if part.startswith("["):
+        markdown_match = re.match(r"^\[([^\]]+)\]\(([^)]+)\)$", part)
+        if not markdown_match:
+          processed_parts.append(part)
+          continue
+
+        link_text = re.sub(r"\s+", " ", markdown_match.group(1)).strip()
+        matched_rule = next((rule for rule in rules if link_text.casefold() == rule.keyword.casefold()), None)
+        if matched_rule:
+          processed_parts.append(f"[{markdown_match.group(1)}]({matched_rule.url})")
+        else:
+          processed_parts.append(part)
+        continue
+
       updated_part = part
       for rule in rules:
         updated_part = replace_keyword(updated_part, rule)
@@ -404,11 +459,22 @@ def main() -> None:
       raise EnvironmentError("OPENAI_API_KEY is required to generate new content.")
     client = OpenAI(api_key=api_key)
 
+    failed_topics: list[str] = []
     for topic in topics:
-      article = generate_article(client, topic)
+      try:
+        article = generate_article(client, topic)
+      except Exception as exc:
+        print(f"[WARN] Failed to generate topic '{topic}': {exc}")
+        failed_topics.append(topic)
+        continue
+
+      if not article:
+        failed_topics.append(topic)
+        continue
+
       save_generated_post(topic, article)
 
-    write_remaining_topics(TOPICS_FILE, remaining)
+    write_remaining_topics(TOPICS_FILE, failed_topics + remaining)
 
   rules = load_affiliate_rules(AFFILIATES_FILE)
   inject_links_into_all_articles(CONTENT_DIR, rules)

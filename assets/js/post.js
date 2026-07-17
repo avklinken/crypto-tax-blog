@@ -108,8 +108,12 @@ function styleRenderedContent(contentEl, articleTitle) {
   });
   contentEl.querySelectorAll("a").forEach((el) => {
     el.className = "font-semibold text-indigo-600 transition hover:underline";
+    el.setAttribute("target", "_blank");
     if (!el.getAttribute("rel")) {
       el.setAttribute("rel", "noopener");
+    }
+    if (!el.getAttribute("rel")?.includes("noreferrer")) {
+      el.setAttribute("rel", `${el.getAttribute("rel")} noreferrer`.trim());
     }
   });
   contentEl.querySelectorAll("blockquote").forEach((el) => {

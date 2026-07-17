@@ -7,7 +7,7 @@ async function loadPosts() {
   const estimateReadingTime = (text) => {
     const words = stripHtmlTags(text).split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(5, Math.ceil(words / 220));
-    return `${minutes} min read`;
+    return `${minutes} min leestijd`;
   };
 
   if (footerYear) {
@@ -40,7 +40,7 @@ async function loadPosts() {
 
       if (!filteredPosts.length) {
         postsContainer.innerHTML = "";
-        emptyState.textContent = "No posts match your search yet. Try another keyword.";
+        emptyState.textContent = "Geen artikelen gevonden voor je zoekopdracht. Probeer een ander trefwoord.";
         emptyState.classList.remove("hidden");
         return;
       }
@@ -51,10 +51,10 @@ async function loadPosts() {
           (post) => `
           <article class="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
             <div class="flex items-center justify-between gap-3">
-              <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">Tax Guide</span>
+              <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">Belastinggids</span>
               <span class="text-xs font-medium text-slate-500">${estimateReadingTime(post.excerpt)}</span>
             </div>
-            <p class="mt-4 text-xs uppercase tracking-wide text-slate-400">${new Date(post.published_at).toLocaleDateString("en-US", {
+            <p class="mt-4 text-xs uppercase tracking-wide text-slate-400">${new Date(post.published_at).toLocaleDateString("nl-NL", {
               year: "numeric",
               month: "short",
               day: "numeric",
@@ -64,7 +64,7 @@ async function loadPosts() {
             </h3>
             <p class="mt-3 text-sm leading-relaxed text-slate-600">${stripHtmlTags(post.excerpt)}</p>
             <a class="mt-5 inline-flex items-center text-sm font-semibold text-indigo-600 transition hover:underline" href="./post.html?slug=${encodeURIComponent(post.slug)}">
-              Read article →
+              Lees meer →
             </a>
           </article>
         `
@@ -79,7 +79,7 @@ async function loadPosts() {
       });
     }
   } catch (error) {
-    emptyState.textContent = "Could not load posts. Make sure /content/index.json exists.";
+    emptyState.textContent = "Artikelen konden niet worden geladen. Controleer of /content/index.json bestaat.";
     emptyState.classList.remove("hidden");
   }
 }

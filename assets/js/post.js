@@ -11,7 +11,7 @@ function estimateReadingTime(markdown) {
   const plain = stripHtmlTags(String(markdown || "").replace(/[#>*_`[\]()!-]/g, " "));
   const words = plain.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(words / 220));
-  return `${minutes} min read`;
+  return `${minutes} min leestijd`;
 }
 
 function styleRenderedContent(contentEl) {
@@ -50,7 +50,7 @@ function styleRenderedContent(contentEl) {
 }
 
 function applySeo(title, description, slug) {
-  document.title = `${title} | Crypto Tax Blog`;
+  document.title = `${title} | CryptoTaxAuthority`;
   const metaDescription = document.querySelector('meta[name="description"]');
   const ogTitle = document.querySelector('meta[property="og:title"]');
   const ogDescription = document.querySelector('meta[property="og:description"]');
@@ -59,7 +59,7 @@ function applySeo(title, description, slug) {
   const url = `${window.location.origin}/post.html?slug=${encodeURIComponent(slug)}`;
 
   if (metaDescription) metaDescription.setAttribute("content", description);
-  if (ogTitle) ogTitle.setAttribute("content", `${title} | Crypto Tax Blog`);
+  if (ogTitle) ogTitle.setAttribute("content", `${title} | CryptoTaxAuthority`);
   if (ogDescription) ogDescription.setAttribute("content", description);
   if (ogUrl) ogUrl.setAttribute("content", url);
   if (canonical) canonical.setAttribute("href", url);
@@ -120,7 +120,7 @@ async function loadPost() {
   }
 
   if (!slug) {
-    errorEl.textContent = "Missing slug. Open this page with ?slug=your-post-slug.";
+    errorEl.textContent = "Ontbrekende slug. Open deze pagina met ?slug=jouw-artikel-slug.";
     errorEl.classList.remove("hidden");
     return;
   }
@@ -132,14 +132,15 @@ async function loadPost() {
     titleEl.textContent = stripHtmlTags(title);
     contentEl.innerHTML = sanitizedHtml;
     styleRenderedContent(contentEl);
-    metaEl.textContent = `Published article: ${slug}`;
+    metaEl.textContent = `Artikel: ${slug}`;
     if (readingTimeEl) {
       readingTimeEl.textContent = estimateReadingTime(markdown);
     }
 
-    const firstParagraph = markdown.split("\n").find((line) => line.trim().length > 40) || "Crypto tax guide and automation insights.";
+    const firstParagraph = markdown.split("\n").find((line) => line.trim().length > 40) || "Crypto belastinggids met praktische automatiseringsinzichten.";
     applySeo(title, firstParagraph.slice(0, 155), slug);
   } catch (error) {
+    errorEl.textContent = "Dit artikel kon niet worden geladen.";
     errorEl.classList.remove("hidden");
   }
 }

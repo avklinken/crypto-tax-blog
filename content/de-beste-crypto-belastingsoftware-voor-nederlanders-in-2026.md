@@ -26,13 +26,13 @@ CoinTracking is een van de oudste en meest vertrouwde namen in de crypto belasti
 
 ### 2. Koinly
 
-<a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> is een andere populaire keuze die zich richt op eenvoud en gebruiksgemak, zonder in te boeten op functionaliteit.
+<a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> is een andere populaire keuze die zich richt op eenvoud en gebruiksgemak, zonder in te boeten op functionaliteit.
 
 #### Voordelen van Koinly
 
-- **Gebruiksvriendelijke interface**: <a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> biedt een intuïtieve gebruikersinterface, ideaal voor zowel beginners als gevorderde gebruikers.
-- **Meertalige ondersteuning**: Naast Engels biedt <a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> ondersteuning in het Nederlands, wat het gebruiksgemak voor Nederlandse gebruikers vergroot.
-- **Automatische belastingrapporten**: <a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> genereert belastingrapporten die voldoen aan de Nederlandse regelgeving, waardoor het indienen van je aangifte een fluitje van een cent is.
+- **Gebruiksvriendelijke interface**: <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> biedt een intuïtieve gebruikersinterface, ideaal voor zowel beginners als gevorderde gebruikers.
+- **Meertalige ondersteuning**: Naast Engels biedt <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> ondersteuning in het Nederlands, wat het gebruiksgemak voor Nederlandse gebruikers vergroot.
+- **Automatische belastingrapporten**: <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> genereert belastingrapporten die voldoen aan de Nederlandse regelgeving, waardoor het indienen van je aangifte een fluitje van een cent is.
 
 ### 3. Accointing
 
@@ -60,4 +60,4 @@ Veel belastingsoftware biedt een proefperiode aan. Maak gebruik van deze mogelij
 
 ## Conclusie
 
-Het kiezen van de juiste crypto belastingsoftware is cruciaal voor het efficiënt en nauwkeurig beheren van je belastingaangifte. In 2026 zijn CoinTracking, <a href='https://koinly.io' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> en Accointing uitstekende opties voor Nederlandse cryptobeleggers. Elk van deze platforms biedt unieke voordelen die zijn afgestemd op de behoeften van de Nederlandse markt. Door je behoeften zorgvuldig te evalueren en verschillende opties te testen, kun je de software kiezen die het beste bij jou past en je belastingaangifteproces aanzienlijk vereenvoudigen. Vergeet niet om altijd op de hoogte te blijven van de laatste belastingregels en richtlijnen van de Belastingdienst om mogelijke problemen te vermijden.
+Het kiezen van de juiste crypto belastingsoftware is cruciaal voor het efficiënt en nauwkeurig beheren van je belastingaangifte. In 2026 zijn CoinTracking, <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> en Accointing uitstekende opties voor Nederlandse cryptobeleggers. Elk van deze platforms biedt unieke voordelen die zijn afgestemd op de behoeften van de Nederlandse markt. Door je behoeften zorgvuldig te evalueren en verschillende opties te testen, kun je de software kiezen die het beste bij jou past en je belastingaangifteproces aanzienlijk vereenvoudigen. Vergeet niet om altijd op de hoogte te blijven van de laatste belastingregels en richtlijnen van de Belastingdienst om mogelijke problemen te vermijden.

@@ -1,8 +1,9 @@
 name: Generate Daily Blog Posts
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 9 * * *'
+    # 09:00 UTC = 11:00 NL zomertijd
+    # 15:00 UTC = 17:00 NL zomertijd
+    - cron: '0 9,15 * * *'
 
 jobs:
   build-and-run:

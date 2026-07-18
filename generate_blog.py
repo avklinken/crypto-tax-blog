@@ -90,22 +90,16 @@ AUTHOR_PROFILES = [
   ),
 ]
 
-PICSUM_IMAGES = [
-  "https://picsum.photos/id/180/1600/900",
-  "https://picsum.photos/id/0/1600/900",
-  "https://picsum.photos/id/1/1600/900",
-  "https://picsum.photos/id/48/1600/900",
-  "https://picsum.photos/id/119/1600/900",
-]
+PIXABAY_IMAGE_URL = "https://pixabay.com"
 
 REQUIRED_JSON_SCHEMA = {
   "title": "Hier de echte titel (bijv. Vrijstelling Box 3 crypto)",
   "h1": "Hier de echte titel",
   "post_title": "Hier de echte titel",
   "name": "Hier de echte titel",
-  "blog_name": "CryptoBelastingGids",
   "category": "Crypto Belasting",
-  "content": "De volledige artikel-inhoud",
+  "blog_name": "CryptoBelastingGids",
+  "content": "De volledige artikel-inhoud in HTML",
 }
 
 
@@ -270,12 +264,6 @@ def get_language_context(language: str) -> dict[str, str]:
 def select_author(topic: str) -> AuthorProfile:
   seed_value = datetime.now(timezone.utc).toordinal() + sum(ord(char) for char in topic)
   return AUTHOR_PROFILES[seed_value % len(AUTHOR_PROFILES)]
-
-
-def stable_picsum_image(topic: str, title: str, keywords: list[str]) -> str:
-  seed_text = f"{topic} {title} {' '.join(keywords)}".strip()
-  seed_value = sum(ord(char) for char in seed_text) if seed_text else 0
-  return PICSUM_IMAGES[seed_value % len(PICSUM_IMAGES)]
 
 
 def tokenize_for_relevance(text: str) -> set[str]:
@@ -474,9 +462,7 @@ Return only valid JSON with these keys:
 - name
 - blog_name
 - category
-- meta_title (max 60 chars)
-- meta_description (max 155 chars)
-- content (Markdown)
+- content (HTML)
 
 Required JSON schema shape:
 {json.dumps(REQUIRED_JSON_SCHEMA, ensure_ascii=False, indent=2)}
@@ -491,8 +477,8 @@ Editorial rules (strict):
 - Do not write these generic transitions: "Kortom", "In deze blogpost", "Navigeren door".
 - Use practical examples, concrete tax scenarios, and direct recommendations.
 - Use only H2/H3 sections in the body; no H1 in content.
-- Keep markdown clean (headings, lists, links, emphasis).
-- Use descriptive alt text in markdown images; avoid raw HTML img tags.
+- Write the article body as clean semantic HTML.
+- Use descriptive alt text in images.
 - {language_context["datapoints"]}
 - {keyword_requirement}
 - All title-like keys (title, h1, post_title, name) must contain the same human title and MUST NOT be "crypto-tax-blog".
@@ -509,7 +495,7 @@ Editorial rules (strict):
         "role": "system",
         "content": (
           "You are a senior editorial crypto tax writer following strict EEAT standards. "
-          "Always return exactly one valid JSON object with keys: title, h1, post_title, name, blog_name, category, meta_title, meta_description, content. "
+          "Always return exactly one valid JSON object with keys: title, h1, post_title, name, category, blog_name, content. "
           "Keep title, h1, post_title, and name exactly identical and never use the placeholder crypto-tax-blog. "
           f'Use blog_name="{BLOG_NAME}" and category="{CATEGORY_NAME}". '
           "Never use markdown code fences around JSON."
@@ -550,17 +536,17 @@ Editorial rules (strict):
     str(payload.get("name", "")).strip(),
   ]
   title = next((value for value in title_candidates if value and value.casefold() != "crypto-tax-blog"), topic)
-  meta_title = trim_to_limit(str(payload.get("meta_title", "")).strip() or title, 60)
-  content_markdown = str(payload.get("content_markdown") or payload.get("content") or "").strip()
+  content_html = str(payload.get("content") or "").strip()
 
-  if not content_markdown:
-    print(f"[WARN] Missing content/content_markdown for topic: {topic}")
+  if not content_html:
+    print(f"[WARN] Missing content for topic: {topic}")
     return None
 
-  plain_body = re.sub(r"<[^>]+>", "", content_markdown)
+  plain_body = re.sub(r"<[^>]+>", "", content_html)
   plain_body = re.sub(r"[#>*_`]", "", plain_body)
   fallback_description = trim_to_limit(re.sub(r"\s+", " ", plain_body).strip()[:155], 155)
-  meta_description = trim_to_limit(str(payload.get("meta_description", "")).strip() or fallback_description or title, 155)
+  meta_title = trim_to_limit(title, 60)
+  meta_description = trim_to_limit(fallback_description or title, 155)
 
   return {
     "title": title,
@@ -571,7 +557,8 @@ Editorial rules (strict):
     "category": CATEGORY_NAME,
     "meta_title": meta_title,
     "meta_description": meta_description,
-    "content_markdown": content_markdown,
+    "content_markdown": content_html,
+    "content_html": content_html,
   }
 
 
@@ -588,8 +575,10 @@ def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfi
     static_output = POSTS_DIR / f"{timestamped}.html"
 
   published_at = datetime.now(timezone.utc).isoformat()
-  image_url = stable_picsum_image(topic, article["title"], [article["title"], article.get("category", "")])
-  body_core = strip_leading_h1(article["content_markdown"]).replace("crypto-tax-blog", article["title"])
+  image_url = PIXABAY_IMAGE_URL
+  body_source = str(article.get("content_html") or article.get("content_markdown") or "")
+  body_core = body_source.replace("crypto-tax-blog", article["title"])
+  body_core = strip_leading_h1(body_core)
   body_core = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", body_core, flags=re.IGNORECASE | re.DOTALL)
   title_h1 = f"<h1>{html.escape(article['title'])}</h1>"
   image_block = f'<img src="{image_url}" alt="Illustratie bij {html.escape(article["title"])}" loading="eager" decoding="async" />'
@@ -906,6 +895,7 @@ def main() -> None:
         language_context["related_heading"],
         language_context["author_heading"],
       )
+      article["content_html"] = article["content_markdown"]
       saved_path = save_generated_post(topic, article, author)
       existing_posts.append(
         {

@@ -657,7 +657,7 @@ def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfi
       '              <path d="M31 33c4-3 6-6 6-10v-7l-6-2-6 2v7c0 4 2 7 6 10z" fill="none" stroke="#ffffff" stroke-width="2"></path>',
       '              <path d="M28.3 24.8l2.5 2.5 4.5-4.7" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>',
       "            </g>",
-      '            <text x="58" y="31" font-size="16" font-weight="700" fill="#1E3A8A" font-family="Inter, Arial, sans-serif" textLength="186" lengthAdjust="spacingAndGlyphs">CryptoBelastingGids</text>',
+      '            <text x="58" y="31" font-size="16" font-weight="700" fill="#1E3A8A" font-family="Inter, Arial, sans-serif">CryptoBelastingGids</text>',
       "          </svg>",
       "        </a>",
       '        <nav class="flex items-center gap-1 md:gap-2">',

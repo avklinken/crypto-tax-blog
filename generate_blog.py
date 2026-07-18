@@ -204,10 +204,16 @@ def parse_front_matter(text: str) -> tuple[dict[str, str], str]:
 
 def strip_leading_h1(markdown: str) -> str:
   content = str(markdown or "").strip()
-  content = re.sub(r"^\s*#\s+.+?\n+", "", content, flags=re.IGNORECASE)
-  content = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", content, flags=re.IGNORECASE | re.DOTALL)
-  content = re.sub(r"^\s*!\[[^\]]*]\([^)]+\)\s*", "", content, flags=re.IGNORECASE)
-  content = re.sub(r"^\s*<img\b[^>]*>\s*", "", content, flags=re.IGNORECASE)
+  while True:
+    updated = content
+    updated = re.sub(r"^\s*#\s+.+?\n+", "", updated, flags=re.IGNORECASE)
+    updated = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", updated, flags=re.IGNORECASE | re.DOTALL)
+    updated = re.sub(r"^\s*!\[[^\]]*]\([^)]+\)\s*", "", updated, flags=re.IGNORECASE)
+    updated = re.sub(r"^\s*<img\b[^>]*>\s*", "", updated, flags=re.IGNORECASE)
+    updated = updated.strip()
+    if updated == content:
+      break
+    content = updated
   return content.strip()
 
 

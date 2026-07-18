@@ -1,4 +1,4 @@
-<h1><a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> review automatisch je crypto belasting berekenen</h1>
+<h1>Koinly review automatisch je crypto belasting berekenen</h1>
 
 # Koinly Review: Automatisch je Crypto Belasting Berekenen
 

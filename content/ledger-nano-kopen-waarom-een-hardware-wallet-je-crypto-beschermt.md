@@ -9,7 +9,7 @@ author_name: "Sanne Verbeek"
 author_role: "Financieel Jurist"
 author_bio: "Sanne specialiseert zich in Europese crypto-regelgeving en Nederlandse fiscale compliance. Ze helpt lezers juridische risico’s te herkennen voordat ze in de praktijk escaleren."
 ---
-<h1><a href='https://shop.ledger.com/?r=328e3afd260c' target='_blank' rel='noopener nofollow sponsored'>Ledger nano</a> kopen waarom een hardware wallet je crypto beschermt</h1>
+<h1>Ledger nano kopen waarom een hardware wallet je crypto beschermt</h1>
 
 ## Understanding the Need for a Hardware Wallet
 

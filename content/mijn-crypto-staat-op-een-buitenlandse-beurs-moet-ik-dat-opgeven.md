@@ -7,7 +7,7 @@ blog_name: "CryptoBelastingGids"
 category: "Crypto Belasting"
 meta_title: "My Crypto is on a Foreign Exchange: Do I Need to Declare It?"
 meta_description: "Understanding Foreign Crypto Holdings As a Dutch taxpayer, holding cryptocurrency on a foreign exchange can raise questions about your tax obligations. The"
-image_url: "https://picsum.photos/id/119/1600/900"
+image_url: "https://picsum.photos/id/48/1600/900"
 slug: "mijn-crypto-staat-op-een-buitenlandse-beurs-moet-ik-dat-opgeven"
 topic: "Mijn crypto staat op een buitenlandse beurs: Moet ik dat opgeven"
 published_at: "2026-07-18T15:19:16.339894+00:00"
@@ -15,7 +15,7 @@ author_name: "Noor Hendriks"
 author_role: "DeFi Risico-adviseur"
 author_bio: "Noor onderzoekt de fiscale impact van staking, lending en DeFi-opbrengsten. Ze vertaalt technische protocollen naar begrijpelijke keuzes voor Nederlandse belastingplichtigen."
 ---
-<h1>My Crypto is on a Foreign Exchange: Do I Need to Declare It?</h1>
+<h1>Mijn crypto staat op een buitenlandse beurs moet ik dat opgeven</h1>
 
 <img src="https://picsum.photos/id/119/1600/900" alt="Illustratie bij My Crypto is on a Foreign Exchange: Do I Need to Declare It?" loading="eager" decoding="async" />
 

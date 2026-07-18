@@ -15,7 +15,7 @@ author_name: "Eva van Riet"
 author_role: "Crypto Belastingconsultant"
 author_bio: "Eva begeleidt Nederlandse beleggers bij Box 3-aangiftes en portefeuille-structurering. Ze vertaalt fiscale regels naar praktische stappen voor particuliere crypto-investeerders."
 ---
-<h1>Wat is het verschil tussen <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> en CoinTracker voor Nederlanders</h1>
+<h1>Wat is het verschil tussen koinly en cointracker voor nederlanders</h1>
 
 <img src="https://picsum.photos/id/180/1600/900" alt="Illustratie bij Wat is het verschil tussen <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> en CoinTracker voor Nederlanders" loading="eager" decoding="async" />
 

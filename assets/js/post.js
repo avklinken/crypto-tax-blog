@@ -31,6 +31,16 @@ function selectFallbackImage(seed) {
   return FALLBACK_IMAGE_POOL[sum % FALLBACK_IMAGE_POOL.length];
 }
 
+function inlineImageFallback(title) {
+  const label = `Illustratie bij ${title || "artikel"}`.replace(/[<>&]/g, "");
+  const svg =
+    `<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'>` +
+    `<rect width='100%' height='100%' fill='#e2e8f0'/>` +
+    `<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#334155' font-size='36' font-family='Arial'>${label}</text>` +
+    `</svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function normalizeTitle(meta, fallbackSlug) {
   const candidates = [meta?.title, meta?.h1, meta?.post_title, meta?.name, meta?.meta_title].map((v) => stripHtmlTags(v || ""));
   const valid = candidates.find((v) => v && v.toLowerCase() !== "crypto-tax-blog");
@@ -162,6 +172,10 @@ function styleRenderedContent(contentEl, articleTitle) {
     }
     img.setAttribute("loading", "lazy");
     img.setAttribute("decoding", "async");
+    img.onerror = () => {
+      img.onerror = null;
+      img.setAttribute("src", inlineImageFallback(articleTitle));
+    };
     img.className = "my-8 rounded-2xl border border-slate-200 shadow-sm";
   });
 }
@@ -217,7 +231,28 @@ function setPostImage(imageEl, imageUrl, title) {
   }
   imageEl.src = src;
   imageEl.alt = `Illustratie bij ${title}`;
+  imageEl.onerror = () => {
+    imageEl.onerror = null;
+    imageEl.src = inlineImageFallback(title);
+  };
   imageEl.classList.remove("hidden");
+}
+
+function normalizeCompare(value) {
+  return stripHtmlTags(String(value || ""))
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function removeDuplicateLeadTitle(contentEl, title) {
+  const target = normalizeCompare(title);
+  if (!target) return;
+  const heading = contentEl.querySelector("h1, h2, h3");
+  if (!heading) return;
+  if (normalizeCompare(heading.textContent) === target) {
+    heading.remove();
+  }
 }
 
 function extractMarkdownDocument(markdownText, fallbackSlug) {
@@ -357,6 +392,7 @@ async function loadPost() {
     document.title = `${stripHtmlTags(post.meta.meta_title || post.meta.title)} | CryptoBelastingGids`;
     setPostImage(imageEl, resolveImageUrl(post.meta.image_url, slug), post.meta.title);
     contentEl.innerHTML = renderedHtml;
+    removeDuplicateLeadTitle(contentEl, post.meta.title);
     styleRenderedContent(contentEl, post.meta.title);
     metaEl.textContent = post.meta.published_at ? `Gepubliceerd: ${new Date(post.meta.published_at).toLocaleDateString("nl-NL")}` : `Artikel: ${slug}`;
     if (readingTimeEl) {

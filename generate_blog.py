@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import html
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -12,8 +13,11 @@ from typing import Iterable
 from openai import OpenAI
 
 SITE_URL = "https://www.cryptobelastinggids.nl"
+BLOG_NAME = "CryptoBelastingGids"
+CATEGORY_NAME = "Crypto Belasting"
 ROOT = Path(__file__).resolve().parent
 CONTENT_DIR = ROOT / "content"
+POSTS_DIR = ROOT / "posts"
 TOPICS_FILE = ROOT / "topics.txt"
 AFFILIATES_FILE = ROOT / "affiliates.json"
 INDEX_FILE = CONTENT_DIR / "index.json"
@@ -85,6 +89,24 @@ AUTHOR_PROFILES = [
     ),
   ),
 ]
+
+PICSUM_IMAGES = [
+  "https://picsum.photos/id/180/1600/900",
+  "https://picsum.photos/id/0/1600/900",
+  "https://picsum.photos/id/1/1600/900",
+  "https://picsum.photos/id/48/1600/900",
+  "https://picsum.photos/id/119/1600/900",
+]
+
+REQUIRED_JSON_SCHEMA = {
+  "title": "Hier de echte titel (bijv. Vrijstelling Box 3 crypto)",
+  "h1": "Hier de echte titel",
+  "post_title": "Hier de echte titel",
+  "name": "Hier de echte titel",
+  "blog_name": "CryptoBelastingGids",
+  "category": "Crypto Belasting",
+  "content": "De volledige artikel-inhoud",
+}
 
 
 def slugify(text: str) -> str:
@@ -248,6 +270,12 @@ def get_language_context(language: str) -> dict[str, str]:
 def select_author(topic: str) -> AuthorProfile:
   seed_value = datetime.now(timezone.utc).toordinal() + sum(ord(char) for char in topic)
   return AUTHOR_PROFILES[seed_value % len(AUTHOR_PROFILES)]
+
+
+def stable_picsum_image(topic: str, title: str, keywords: list[str]) -> str:
+  seed_text = f"{topic} {title} {' '.join(keywords)}".strip()
+  seed_value = sum(ord(char) for char in seed_text) if seed_text else 0
+  return PICSUM_IMAGES[seed_value % len(PICSUM_IMAGES)]
 
 
 def tokenize_for_relevance(text: str) -> set[str]:
@@ -441,9 +469,17 @@ Create a high-quality SEO article about: "{topic}".
 
 Return only valid JSON with these keys:
 - title
+- h1
+- post_title
+- name
+- blog_name
+- category
 - meta_title (max 60 chars)
 - meta_description (max 155 chars)
 - content (Markdown)
+
+Required JSON schema shape:
+{json.dumps(REQUIRED_JSON_SCHEMA, ensure_ascii=False, indent=2)}
 
 Editorial rules (strict):
 - Write in {language_context["language_name"]}.
@@ -459,6 +495,8 @@ Editorial rules (strict):
 - Use descriptive alt text in markdown images; avoid raw HTML img tags.
 - {language_context["datapoints"]}
 - {keyword_requirement}
+- All title-like keys (title, h1, post_title, name) must contain the same human title and MUST NOT be "crypto-tax-blog".
+- Set blog_name to "{BLOG_NAME}" and category to "{CATEGORY_NAME}".
 - No code fences. No extra explanation. Output JSON only.
 """.strip()
 
@@ -471,7 +509,9 @@ Editorial rules (strict):
         "role": "system",
         "content": (
           "You are a senior editorial crypto tax writer following strict EEAT standards. "
-          "Always return exactly one valid JSON object with keys: title, meta_title, meta_description, content. "
+          "Always return exactly one valid JSON object with keys: title, h1, post_title, name, blog_name, category, meta_title, meta_description, content. "
+          "Keep title, h1, post_title, and name exactly identical and never use the placeholder crypto-tax-blog. "
+          f'Use blog_name="{BLOG_NAME}" and category="{CATEGORY_NAME}". '
           "Never use markdown code fences around JSON."
         ),
       },
@@ -498,7 +538,18 @@ Editorial rules (strict):
     print(f"[WARN] JSON root is not an object for topic: {topic}")
     return None
 
-  title = str(payload.get("title", "")).strip() or topic
+  expected_keys = {"title", "h1", "post_title", "name", "blog_name", "category", "content"}
+  missing_keys = [key for key in expected_keys if key not in payload]
+  if missing_keys:
+    print(f"[WARN] Missing expected JSON keys for topic '{topic}': {', '.join(missing_keys)}")
+
+  title_candidates = [
+    str(payload.get("title", "")).strip(),
+    str(payload.get("h1", "")).strip(),
+    str(payload.get("post_title", "")).strip(),
+    str(payload.get("name", "")).strip(),
+  ]
+  title = next((value for value in title_candidates if value and value.casefold() != "crypto-tax-blog"), topic)
   meta_title = trim_to_limit(str(payload.get("meta_title", "")).strip() or title, 60)
   content_markdown = str(payload.get("content_markdown") or payload.get("content") or "").strip()
 
@@ -513,6 +564,11 @@ Editorial rules (strict):
 
   return {
     "title": title,
+    "h1": title,
+    "post_title": title,
+    "name": title,
+    "blog_name": BLOG_NAME,
+    "category": CATEGORY_NAME,
     "meta_title": meta_title,
     "meta_description": meta_description,
     "content_markdown": content_markdown,
@@ -521,20 +577,36 @@ Editorial rules (strict):
 
 def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfile) -> Path:
   CONTENT_DIR.mkdir(parents=True, exist_ok=True)
+  POSTS_DIR.mkdir(parents=True, exist_ok=True)
   base_slug = slugify(topic)
   output = CONTENT_DIR / f"{base_slug}.md"
+  static_output = POSTS_DIR / f"{base_slug}.html"
 
   if output.exists():
-    output = CONTENT_DIR / f"{base_slug}-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}.md"
+    timestamped = f"{base_slug}-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+    output = CONTENT_DIR / f"{timestamped}.md"
+    static_output = POSTS_DIR / f"{timestamped}.html"
 
   published_at = datetime.now(timezone.utc).isoformat()
-  body = strip_leading_h1(article["content_markdown"])
+  image_url = stable_picsum_image(topic, article["title"], [article["title"], article.get("category", "")])
+  body_core = strip_leading_h1(article["content_markdown"]).replace("crypto-tax-blog", article["title"])
+  body_core = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", body_core, flags=re.IGNORECASE | re.DOTALL)
+  title_h1 = f"<h1>{html.escape(article['title'])}</h1>"
+  image_block = f'<img src="{image_url}" alt="Illustratie bij {html.escape(article["title"])}" loading="eager" decoding="async" />'
+  body = f"{title_h1}\n\n{image_block}\n\n{body_core.strip()}".strip()
+
   front_matter = "\n".join(
     [
       "---",
       f"title: {quote_yaml_value(article['title'])}",
+      f"h1: {quote_yaml_value(article['h1'])}",
+      f"post_title: {quote_yaml_value(article['post_title'])}",
+      f"name: {quote_yaml_value(article['name'])}",
+      f"blog_name: {quote_yaml_value(article['blog_name'])}",
+      f"category: {quote_yaml_value(article['category'])}",
       f"meta_title: {quote_yaml_value(article['meta_title'])}",
       f"meta_description: {quote_yaml_value(article['meta_description'])}",
+      f"image_url: {quote_yaml_value(image_url)}",
       f"slug: {quote_yaml_value(output.stem)}",
       f"topic: {quote_yaml_value(topic)}",
       f"published_at: {quote_yaml_value(published_at)}",
@@ -547,6 +619,41 @@ def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfi
   )
 
   output.write_text(front_matter + body.strip() + "\n", encoding="utf-8")
+
+  static_html = "\n".join(
+    [
+      "<!doctype html>",
+      '<html lang="nl">',
+      "  <head>",
+      '    <meta charset="UTF-8" />',
+      '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+      f"    <title>{html.escape(article['meta_title'])} | {BLOG_NAME}</title>",
+      f'    <meta name="description" content="{html.escape(article["meta_description"])}" />',
+      f'    <link rel="canonical" href="{SITE_URL}/posts/{output.stem}.html" />',
+      f'    <meta property="og:title" content="{html.escape(article["meta_title"])}" />',
+      f'    <meta property="og:description" content="{html.escape(article["meta_description"])}" />',
+      f'    <meta property="og:url" content="{SITE_URL}/posts/{output.stem}.html" />',
+      f'    <meta property="og:image" content="{image_url}" />',
+      '    <meta property="og:type" content="article" />',
+      f'    <meta property="og:site_name" content="{BLOG_NAME}" />',
+      '    <link rel="stylesheet" href="/assets/css/styles.css" />',
+      "  </head>",
+      "  <body>",
+      '    <header><nav><a href="https://www.cryptobelastinggids.nl/">CryptoBelastingGids</a></nav></header>',
+      "    <main>",
+      "      <article>",
+      f"        {title_h1}",
+      f'        <img src="{image_url}" alt="Illustratie bij {html.escape(article["title"])}" loading="eager" decoding="async" />',
+      f"        {body_core}",
+      "      </article>",
+      "    </main>",
+      "    <footer><p>© CryptoBelastingGids</p></footer>",
+      "  </body>",
+      "</html>",
+      "",
+    ]
+  )
+  static_output.write_text(static_html, encoding="utf-8")
   return output
 
 

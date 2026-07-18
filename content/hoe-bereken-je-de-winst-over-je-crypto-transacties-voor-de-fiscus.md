@@ -1,3 +1,5 @@
+<h1>Hoe bereken je de winst over je crypto transacties voor de fiscus</h1>
+
 # Hoe bereken je de winst over je crypto transacties voor de fiscus
 
 In de afgelopen jaren is cryptocurrency uitgegroeid van een nichemarkt tot een mainstream investeringsoptie. Met deze groei komt echter ook de noodzaak om je fiscale verplichtingen te begrijpen. Hoe bereken je de winst over je crypto transacties voor de fiscus? Dit artikel biedt een stapsgewijze handleiding om je te helpen bij het nauwkeurig rapporteren van je crypto winsten, zodat je voldoet aan de belastingwetgeving.

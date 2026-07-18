@@ -9,6 +9,8 @@ author_name: "Eva van Riet"
 author_role: "Crypto Belastingconsultant"
 author_bio: "Eva begeleidt Nederlandse beleggers bij Box 3-aangiftes en portefeuille-structurering. Ze vertaalt fiscale regels naar praktische stappen voor particuliere crypto-investeerders."
 ---
+<h1>Vrijstelling box 3 crypto hoeveel crypto is belastingvrij</h1>
+
 ### Vrijstelling en Belasting op Crypto in Box 3
 
 In 2026 worden de regels rondom de belasting van cryptovaluta in Box 3 verder aangescherpt. Het is daarom van groot belang om te begrijpen hoeveel van je crypto belastingvrij is en welke strategieën je kunt toepassen om je belastingdruk te minimaliseren. 

@@ -9,6 +9,8 @@ author_name: "Milan de Groot"
 author_role: "On-chain Data Analist"
 author_bio: "Milan analyseert walletstromen, exchange-data en transactielogs voor fiscale reconstructies. Zijn focus ligt op aantoonbare datakwaliteit en reproduceerbare rapportages."
 ---
+<h1>Crypto verliezen aftrekken van de belasting kan dat</h1>
+
 ### Begrijp de fiscale regels voor crypto
 
 In Nederland worden cryptovaluta's zoals Bitcoin en Ethereum beschouwd als vermogen en vallen ze onder de Box 3 belastingregels. Als je crypto verliest, vraag je je misschien af of je deze verliezen kunt aftrekken van de belasting. Het antwoord is genuanceerd en hangt af van je specifieke situatie.
@@ -17,7 +19,7 @@ In Nederland worden cryptovaluta's zoals Bitcoin en Ethereum beschouwd als vermo
 
 Vanaf 2026 is het Box 3 belastingtarief vastgesteld op 36%. Het fictieve forfaitaire rendement op crypto is 6,00%. Dit betekent dat de belastingdienst uitgaat van een jaarlijkse opbrengst van 6,00% op je crypto-investeringen, ongeacht de werkelijke winst of verlies. Daarnaast is er een heffingsvrij vermogen van €59.357, of €118.714 voor fiscale partners. Dit betekent dat je geen belasting betaalt over dit deel van je vermogen.
 
-![Crypto belasting](https://example.com/image.jpg "Afbeelding van crypto belasting")
+![Crypto belasting](https://picsum.photos/id/180/1600/900)
 
 ### Verliezen op crypto: Wat betekent het?
 

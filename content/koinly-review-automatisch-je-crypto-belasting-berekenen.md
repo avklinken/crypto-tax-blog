@@ -1,3 +1,5 @@
+<h1>Koinly review automatisch je crypto belasting berekenen</h1>
+
 # Koinly Review: Automatisch je Crypto Belasting Berekenen
 
 In de huidige digitale wereld is de handel in cryptocurrency enorm populair geworden. Veel Nederlandse handelaren en investeerders realiseren zich echter niet dat hier ook belastingverplichtingen aan verbonden zijn. Het handmatig berekenen van crypto belastingen kan een tijdrovende en complexe taak zijn. Gelukkig is er <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a>, een tool die belooft deze klus te verlichten door je crypto belastingen automatisch te berekenen. In deze review duiken we dieper in de functionaliteiten van <a href='https://koinly.io/?via=ED1CED45&utm_source=affiliate' target='_blank' rel='noopener nofollow sponsored'>Koinly</a> en kijken we of het echt de moeite waard is voor Nederlandse crypto-gebruikers.

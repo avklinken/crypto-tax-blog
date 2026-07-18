@@ -1,3 +1,5 @@
+<h1>Hoe geef je bitcoin en crypto op bij de belastingdienst in box 3</h1>
+
 # Hoe geef je Bitcoin en crypto op bij de Belastingdienst in Box 3
 
 De opkomst van Bitcoin en andere cryptovaluta heeft veel mensen geïnspireerd om te investeren in deze digitale activa. Maar met deze nieuwe investeringsmogelijkheden komen ook nieuwe verantwoordelijkheden, vooral als het gaat om belastingaangifte. Hoe geef je Bitcoin en andere cryptovaluta op bij de Belastingdienst in Box 3? In deze gids nemen we je stap voor stap mee door het proces en geven we praktische tips om ervoor te zorgen dat je aan alle wettelijke verplichtingen voldoet.

@@ -90,7 +90,13 @@ AUTHOR_PROFILES = [
   ),
 ]
 
-PIXABAY_IMAGE_URL = "https://pixabay.com"
+FALLBACK_IMAGE_POOL = [
+  "https://picsum.photos/id/180/1600/900",
+  "https://picsum.photos/id/0/1600/900",
+  "https://picsum.photos/id/1/1600/900",
+  "https://picsum.photos/id/48/1600/900",
+  "https://picsum.photos/id/119/1600/900",
+]
 
 REQUIRED_JSON_SCHEMA = {
   "title": "Hier de echte titel (bijv. Vrijstelling Box 3 crypto)",
@@ -101,6 +107,11 @@ REQUIRED_JSON_SCHEMA = {
   "blog_name": "CryptoBelastingGids",
   "content": "De volledige artikel-inhoud in HTML",
 }
+
+
+def select_fallback_image(seed: str) -> str:
+  value = sum(ord(char) for char in (seed or ""))
+  return FALLBACK_IMAGE_POOL[value % len(FALLBACK_IMAGE_POOL)]
 
 
 def slugify(text: str) -> str:
@@ -575,7 +586,7 @@ def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfi
     static_output = POSTS_DIR / f"{timestamped}.html"
 
   published_at = datetime.now(timezone.utc).isoformat()
-  image_url = PIXABAY_IMAGE_URL
+  image_url = select_fallback_image(f"{topic}-{article['title']}")
   body_source = str(article.get("content_html") or article.get("content_markdown") or "")
   body_core = body_source.replace("crypto-tax-blog", article["title"])
   body_core = strip_leading_h1(body_core)

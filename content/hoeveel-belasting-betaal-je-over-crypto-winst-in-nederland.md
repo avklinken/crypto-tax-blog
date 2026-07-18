@@ -7,6 +7,8 @@ topic: "Hoeveel belasting betaal je over crypto winst in Nederland"
 published_at: "2026-07-17T12:03:04.958112+00:00"
 ---
 
+<h1>Hoeveel belasting betaal je over crypto winst in nederland</h1>
+
 ## Introductie
 
 Cryptocurrency wint de laatste jaren aan populariteit, niet alleen als investeringsmiddel maar ook als betaalmiddel. Echter, met deze populariteit komt ook de verantwoordelijkheid om belasting te betalen over eventuele winsten die je met crypto maakt. In Nederland zijn de regels voor het betalen van belasting over crypto winst niet altijd even duidelijk. Dit artikel biedt een uitgebreid overzicht van hoe je je crypto winsten correct kunt aangeven en hoeveel belasting je hierover moet betalen.

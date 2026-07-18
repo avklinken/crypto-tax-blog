@@ -9,6 +9,8 @@ author_name: "Milan de Groot"
 author_role: "On-chain Data Analist"
 author_bio: "Milan analyseert walletstromen, exchange-data en transactielogs voor fiscale reconstructies. Zijn focus ligt op aantoonbare datakwaliteit en reproduceerbare rapportages."
 ---
+<h1>Bitvavo belastingaangifte zo exporteer je jouw transacties</h1>
+
 ### Understanding Bitvavo Transactions for Tax Purposes
 
 If you're trading cryptocurrencies on Bitvavo, you're part of a growing community benefiting from the platform's user-friendly experience. However, as exciting as trading can be, tax season introduces its own challenges. Properly filing your crypto taxes in the Netherlands requires understanding how to export your transactions from Bitvavo efficiently and accurately.

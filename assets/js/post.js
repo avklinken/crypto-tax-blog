@@ -1,4 +1,11 @@
 const SITE_URL = "https://www.cryptobelastinggids.nl";
+const FALLBACK_IMAGE_POOL = [
+  "https://picsum.photos/id/180/1600/900",
+  "https://picsum.photos/id/0/1600/900",
+  "https://picsum.photos/id/1/1600/900",
+  "https://picsum.photos/id/48/1600/900",
+  "https://picsum.photos/id/119/1600/900",
+];
 
 function getSlug() {
   const params = new URLSearchParams(window.location.search);
@@ -7,6 +14,43 @@ function getSlug() {
 
 function stripHtmlTags(value) {
   return String(value || "").replace(/<[^>]*>/g, "").trim();
+}
+
+function slugToTitle(slug) {
+  return String(slug || "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/^./, (m) => m.toUpperCase());
+}
+
+function selectFallbackImage(seed) {
+  const input = String(seed || "article");
+  let sum = 0;
+  for (const ch of input) sum += ch.charCodeAt(0);
+  return FALLBACK_IMAGE_POOL[sum % FALLBACK_IMAGE_POOL.length];
+}
+
+function normalizeTitle(meta, fallbackSlug) {
+  const candidates = [meta?.title, meta?.h1, meta?.post_title, meta?.name, meta?.meta_title].map((v) => stripHtmlTags(v || ""));
+  const valid = candidates.find((v) => v && v.toLowerCase() !== "crypto-tax-blog");
+  return valid || slugToTitle(fallbackSlug);
+}
+
+function resolveImageUrl(rawUrl, slug) {
+  const src = String(rawUrl || "").trim();
+  if (!src) return selectFallbackImage(slug);
+  const lower = src.toLowerCase();
+  if (
+    lower.includes("example.com") ||
+    lower.includes("unsplash.com") ||
+    lower.includes("source.unsplash.com") ||
+    lower === "https://pixabay.com" ||
+    lower === "http://pixabay.com"
+  ) {
+    return selectFallbackImage(slug);
+  }
+  return src;
 }
 
 function estimateReadingTime(markdown) {
@@ -186,14 +230,14 @@ function setPostImage(imageEl, imageUrl, title) {
 function extractMarkdownDocument(markdownText, fallbackSlug) {
   const { meta, body } = parseFrontMatter(markdownText);
   const bodyWithoutLeadingH1 = removeLeadingH1(body);
-  const title = stripHtmlTags(meta.title || fallbackSlug.replace(/-/g, " "));
+  const title = normalizeTitle(meta, fallbackSlug);
   return {
     meta: {
       title,
       meta_title: stripHtmlTags(meta.meta_title || title),
       meta_description: stripHtmlTags(meta.meta_description || ""),
       published_at: stripHtmlTags(meta.published_at || ""),
-      image_url: stripHtmlTags(meta.image_url || meta.image || extractFirstImageFromMarkdown(body) || ""),
+      image_url: resolveImageUrl(stripHtmlTags(meta.image_url || meta.image || extractFirstImageFromMarkdown(body) || ""), fallbackSlug),
       slug: stripHtmlTags(meta.slug || fallbackSlug),
     },
     body: bodyWithoutLeadingH1 || body,
@@ -229,7 +273,7 @@ function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
   const titleFromContent = stripHtmlTags(
     doc.querySelector("main article h1")?.textContent || doc.querySelector("article h1")?.textContent || doc.querySelector("h1")?.textContent || ""
   );
-  const title = titleFromContent || titleFromHead || fallbackSlug.replace(/-/g, " ");
+  const title = normalizeTitle({ title: titleFromContent || titleFromHead }, fallbackSlug);
 
   return {
     meta: {
@@ -237,12 +281,12 @@ function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
       meta_title: titleFromHead || title,
       meta_description: descriptionFromHead,
       published_at: publishedFromHead,
-      image_url: stripHtmlTags(
+      image_url: resolveImageUrl(stripHtmlTags(
         doc.querySelector("meta[property='og:image']")?.getAttribute("content") ||
           doc.querySelector("meta[name='twitter:image']")?.getAttribute("content") ||
           extractFirstImageFromHtml(container.innerHTML) ||
           ""
-      ),
+      ), fallbackSlug),
       slug: fallbackSlug,
     },
     body: container.innerHTML.trim(),
@@ -259,7 +303,7 @@ async function fetchPost(slug) {
 
     if (path.endsWith(".json")) {
       const data = await response.json();
-      const title = stripHtmlTags(data.title || slug.replace(/-/g, " "));
+      const title = normalizeTitle(data, slug);
       const markdown = data.content_markdown || data.content || "";
       return {
         meta: {
@@ -267,7 +311,7 @@ async function fetchPost(slug) {
           meta_title: stripHtmlTags(data.meta_title || title),
           meta_description: stripHtmlTags(data.meta_description || ""),
           published_at: stripHtmlTags(data.published_at || ""),
-          image_url: stripHtmlTags(data.image_url || data.image || extractFirstImageFromMarkdown(markdown) || ""),
+          image_url: resolveImageUrl(stripHtmlTags(data.image_url || data.image || extractFirstImageFromMarkdown(markdown) || ""), slug),
           slug,
         },
         body: removeLeadingH1(markdown),
@@ -313,7 +357,7 @@ async function loadPost() {
 
     titleEl.textContent = stripHtmlTags(post.meta.title);
     document.title = `${stripHtmlTags(post.meta.meta_title || post.meta.title)} | CryptoBelastingGids`;
-    setPostImage(imageEl, post.meta.image_url, post.meta.title);
+    setPostImage(imageEl, resolveImageUrl(post.meta.image_url, slug), post.meta.title);
     contentEl.innerHTML = renderedHtml;
     styleRenderedContent(contentEl, post.meta.title);
     metaEl.textContent = post.meta.published_at ? `Gepubliceerd: ${new Date(post.meta.published_at).toLocaleDateString("nl-NL")}` : `Artikel: ${slug}`;

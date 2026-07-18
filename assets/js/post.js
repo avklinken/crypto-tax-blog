@@ -148,12 +148,39 @@ function applySeo(meta, fallbackTitle, fallbackDescription, slug) {
   setMetaTag('meta[property="og:type"]', "article");
   setMetaTag('meta[property="og:url"]', url);
   setMetaTag('meta[property="og:site_name"]', "CryptoBelastingGids");
+  setMetaTag('meta[property="og:image"]', stripHtmlTags(meta.image_url || ""));
   setMetaTag('meta[name="robots"]', "index,follow");
 
   const canonical = document.getElementById("canonical-link");
   if (canonical) {
     canonical.setAttribute("href", url);
   }
+}
+
+function extractFirstImageFromMarkdown(markdown) {
+  const mdMatch = String(markdown || "").match(/!\[[^\]]*]\((https?:\/\/[^)\s]+)(?:\s+"[^"]*")?\)/i);
+  if (mdMatch?.[1]) return mdMatch[1];
+  const htmlMatch = String(markdown || "").match(/<img\b[^>]*\bsrc=["'](https?:\/\/[^"']+)["'][^>]*>/i);
+  return htmlMatch?.[1] || "";
+}
+
+function extractFirstImageFromHtml(htmlText) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlText, "text/html");
+  return doc.querySelector("img")?.getAttribute("src") || "";
+}
+
+function setPostImage(imageEl, imageUrl, title) {
+  if (!imageEl) return;
+  const src = String(imageUrl || "").trim();
+  if (!src) {
+    imageEl.removeAttribute("src");
+    imageEl.classList.add("hidden");
+    return;
+  }
+  imageEl.src = src;
+  imageEl.alt = `Illustratie bij ${title}`;
+  imageEl.classList.remove("hidden");
 }
 
 function extractMarkdownDocument(markdownText, fallbackSlug) {
@@ -166,6 +193,7 @@ function extractMarkdownDocument(markdownText, fallbackSlug) {
       meta_title: stripHtmlTags(meta.meta_title || title),
       meta_description: stripHtmlTags(meta.meta_description || ""),
       published_at: stripHtmlTags(meta.published_at || ""),
+      image_url: stripHtmlTags(meta.image_url || meta.image || extractFirstImageFromMarkdown(body) || ""),
       slug: stripHtmlTags(meta.slug || fallbackSlug),
     },
     body: bodyWithoutLeadingH1 || body,
@@ -209,6 +237,12 @@ function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
       meta_title: titleFromHead || title,
       meta_description: descriptionFromHead,
       published_at: publishedFromHead,
+      image_url: stripHtmlTags(
+        doc.querySelector("meta[property='og:image']")?.getAttribute("content") ||
+          doc.querySelector("meta[name='twitter:image']")?.getAttribute("content") ||
+          extractFirstImageFromHtml(container.innerHTML) ||
+          ""
+      ),
       slug: fallbackSlug,
     },
     body: container.innerHTML.trim(),
@@ -233,6 +267,7 @@ async function fetchPost(slug) {
           meta_title: stripHtmlTags(data.meta_title || title),
           meta_description: stripHtmlTags(data.meta_description || ""),
           published_at: stripHtmlTags(data.published_at || ""),
+          image_url: stripHtmlTags(data.image_url || data.image || extractFirstImageFromMarkdown(markdown) || ""),
           slug,
         },
         body: removeLeadingH1(markdown),
@@ -258,13 +293,14 @@ async function loadPost() {
   const readingTimeEl = document.getElementById("reading-time");
   const footerYear = document.getElementById("footer-year");
   const errorEl = document.getElementById("post-error");
+  const imageEl = document.getElementById("post-image");
 
   if (footerYear) {
     footerYear.textContent = String(new Date().getFullYear());
   }
 
   if (!slug) {
-    errorEl.textContent = "Ontbrekende slug. Open deze pagina met ?slug=jouw-artikel-slug.";
+    errorEl.innerText = "Ontbrekende slug. Open deze pagina met ?slug=jouw-artikel-slug.";
     errorEl.classList.remove("hidden");
     return;
   }
@@ -276,6 +312,8 @@ async function loadPost() {
       post.body_format === "html" ? DOMPurify.sanitize(post.body) : DOMPurify.sanitize(marked.parse(post.body));
 
     titleEl.textContent = stripHtmlTags(post.meta.title);
+    document.title = `${stripHtmlTags(post.meta.meta_title || post.meta.title)} | CryptoBelastingGids`;
+    setPostImage(imageEl, post.meta.image_url, post.meta.title);
     contentEl.innerHTML = renderedHtml;
     styleRenderedContent(contentEl, post.meta.title);
     metaEl.textContent = post.meta.published_at ? `Gepubliceerd: ${new Date(post.meta.published_at).toLocaleDateString("nl-NL")}` : `Artikel: ${slug}`;
@@ -288,7 +326,7 @@ async function loadPost() {
       "Crypto belastinggids met praktische automatiseringsinzichten.";
     applySeo(post.meta, post.meta.title, fallbackDescription, slug);
   } catch (error) {
-    errorEl.textContent = "Dit artikel kon niet worden geladen.";
+    errorEl.innerText = "Dit artikel kon niet worden geladen.";
     errorEl.classList.remove("hidden");
   }
 }

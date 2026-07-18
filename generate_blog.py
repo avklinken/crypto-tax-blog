@@ -203,15 +203,12 @@ def parse_front_matter(text: str) -> tuple[dict[str, str], str]:
 
 
 def strip_leading_h1(markdown: str) -> str:
-  lines = markdown.splitlines()
-  stripped: list[str] = []
-  removed = False
-  for line in lines:
-    if not removed and line.lstrip().startswith("# "):
-      removed = True
-      continue
-    stripped.append(line)
-  return "\n".join(stripped).strip()
+  content = str(markdown or "").strip()
+  content = re.sub(r"^\s*#\s+.+?\n+", "", content, flags=re.IGNORECASE)
+  content = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", content, flags=re.IGNORECASE | re.DOTALL)
+  content = re.sub(r"^\s*!\[[^\]]*]\([^)]+\)\s*", "", content, flags=re.IGNORECASE)
+  content = re.sub(r"^\s*<img\b[^>]*>\s*", "", content, flags=re.IGNORECASE)
+  return content.strip()
 
 
 def clean_json_response(raw: str) -> str:

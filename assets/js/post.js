@@ -104,19 +104,12 @@ function parseFrontMatter(markdown) {
 }
 
 function removeLeadingH1(markdown) {
-  const lines = markdown.split("\n");
-  const body = [];
-  let skipped = false;
-
-  for (const line of lines) {
-    if (!skipped && line.trim().startsWith("# ")) {
-      skipped = true;
-      continue;
-    }
-    body.push(line);
-  }
-
-  return body.join("\n").trim();
+  let body = String(markdown || "");
+  body = body.replace(/^\s*#\s+.+?\n+/i, "");
+  body = body.replace(/^\s*<h1\b[^>]*>.*?<\/h1>\s*/is, "");
+  body = body.replace(/^\s*!\[[^\]]*]\([^)]+\)\s*/i, "");
+  body = body.replace(/^\s*<img\b[^>]*>\s*/i, "");
+  return body.trim();
 }
 
 function styleRenderedContent(contentEl, articleTitle) {
@@ -269,6 +262,10 @@ function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
   if (firstH1) {
     firstH1.remove();
   }
+  const firstImage = container.querySelector("img");
+  if (firstImage) {
+    firstImage.remove();
+  }
 
   const titleFromContent = stripHtmlTags(
     doc.querySelector("main article h1")?.textContent || doc.querySelector("article h1")?.textContent || doc.querySelector("h1")?.textContent || ""
@@ -284,6 +281,7 @@ function extractRenderedHtmlDocument(htmlText, fallbackSlug) {
       image_url: resolveImageUrl(stripHtmlTags(
         doc.querySelector("meta[property='og:image']")?.getAttribute("content") ||
           doc.querySelector("meta[name='twitter:image']")?.getAttribute("content") ||
+          firstImage?.getAttribute("src") ||
           extractFirstImageFromHtml(container.innerHTML) ||
           ""
       ), fallbackSlug),

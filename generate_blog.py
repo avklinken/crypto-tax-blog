@@ -229,15 +229,7 @@ def format_keyword_list(keywords: list[str]) -> str:
 
 
 def detect_language(topic: str) -> str:
-  configured = os.getenv("BLOG_LANGUAGE", "").strip().lower()
-  if configured in {"nl", "en"}:
-    return configured
-
-  dutch_markers = {"belasting", "belastingen", "nederland", "box", "fiscus", "belastingsdienst", "aangifte"}
-  token_set = set(re.findall(r"[a-zA-Z]+", topic.lower()))
-  if token_set.intersection(dutch_markers):
-    return "nl"
-  return "en"
+  return "nl"
 
 
 def get_language_context(language: str) -> dict[str, str]:
@@ -661,10 +653,10 @@ def save_generated_post(topic: str, article: dict[str, str], author: AuthorProfi
       "          </svg>",
       "        </a>",
       '        <nav class="flex items-center gap-1 md:gap-2">',
-      '          <a href="https://www.cryptobelastinggids.nl/" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Home</a>',
-      '          <a href="https://www.cryptobelastinggids.nl/guides.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Guides</a>',
-      '          <a href="https://www.cryptobelastinggids.nl/articles.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Articles</a>',
-      '          <a href="https://www.cryptobelastinggids.nl/about.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">About</a>',
+      '          <a href="https://www.cryptobelastinggids.nl/" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Start</a>',
+      '          <a href="https://www.cryptobelastinggids.nl/guides.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Gidsen</a>',
+      '          <a href="https://www.cryptobelastinggids.nl/articles.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Artikelen</a>',
+      '          <a href="https://www.cryptobelastinggids.nl/about.html" class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Over Ons</a>',
       "        </nav>",
       "      </div>",
       "    </header>",
